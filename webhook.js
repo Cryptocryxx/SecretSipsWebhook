@@ -27,17 +27,13 @@ app.post('/webhook', (req, res) => {
 });
 
 app.post('/webhook/wh', (req, res) => {
-  console.log("1")
   if (!checkSignature(req)) {
       res.status(403).json("Invalid Signature");
   }
 
-  console.log("2")
 // Führe nur dann git pull aus, wenn die Signatur korrekt ist
 if (req.body.ref === 'refs/heads/main') { // Prüfe, ob der Push auf den 'main'-Branch erfolgt
-  console.log("4")
   exec('cd /home/secret-sips/SecretSipsWebhook && git pull && pm2 restart webhook.js', (error, stdout, stderr) => {
-    console.log("5")
     if (error) {
       console.error(`Fehler bei git pull: ${error}`);
       return res.sendStatus(500); // Fehler beim git pull
