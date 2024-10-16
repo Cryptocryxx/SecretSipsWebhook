@@ -52,7 +52,7 @@ app.post('/webhook/frontend', (req, res) => {
 
 // Führe nur dann git pull aus, wenn die Signatur korrekt ist
 if (req.body.ref === 'refs/heads/main') { // Prüfe, ob der Push auf den 'main'-Branch erfolgt
-  exec('cd /home/secret-sips/secret-sips && git pull && npm &&   pm2 restart secret-sips-frontend', (error, stdout, stderr) => {
+  exec('cd /home/secret-sips/secret-sips && git pull && npm && pm2 restart secret-sips-frontend', (error, stdout, stderr) => {
     if (error) {
       console.error(`Fehler bei git pull: ${error}`);
       return res.sendStatus(500); // Fehler beim git pull
