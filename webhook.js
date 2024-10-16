@@ -45,6 +45,25 @@ if (req.body.ref === 'refs/heads/main') { // Prüfe, ob der Push auf den 'main'-
 }
 });
 
+app.post('/webhook/frontend', (req, res) => {
+  if (!checkSignature(req)) {
+      res.status(403).json("Invalid Signature");
+  }
+
+// Führe nur dann git pull aus, wenn die Signatur korrekt ist
+if (req.body.ref === 'refs/heads/main') { // Prüfe, ob der Push auf den 'main'-Branch erfolgt
+  exec('cd /home/secret-sips/secret-sips && git pull && pm2 restart secret-sips-frontend', (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Fehler bei git pull: ${error}`);
+      return res.sendStatus(500); // Fehler beim git pull
+    }
+    res.sendStatus(200); // Erfolg
+  });
+} else {
+  res.sendStatus(200); // Ignoriere andere Branches
+}
+});
+
 function checkSignature(req) {
     const signature = req.headers['x-hub-signature'];
     console.log(`Signatur von x-hub: ${signature}`)
