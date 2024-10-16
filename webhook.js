@@ -57,6 +57,7 @@ if (req.body.ref === 'refs/heads/main') { // Prüfe, ob der Push auf den 'main'-
       console.error(`Fehler bei git pull: ${error}`);
       return res.sendStatus(500); // Fehler beim git pull
     }
+    console.log(stdout)
     res.sendStatus(200); // Erfolg
   });
 } else {
