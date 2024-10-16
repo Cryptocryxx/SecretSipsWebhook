@@ -25,7 +25,7 @@ app.post('/webhook', (req, res) => {
     res.sendStatus(200); // Ignoriere andere Branches
   }
 });
-
+// --------------- webhook ------------
 app.post('/webhook/wh', (req, res) => {
   if (!checkSignature(req)) {
       res.status(403).json("Invalid Signature");
@@ -44,7 +44,7 @@ if (req.body.ref === 'refs/heads/main') { // Prüfe, ob der Push auf den 'main'-
   res.sendStatus(200); // Ignoriere andere Branches
 }
 });
-
+// ------------- frontend -----------------
 app.post('/webhook/frontend', (req, res) => {
   if (!checkSignature(req)) {
       res.status(403).json("Invalid Signature");
@@ -53,6 +53,7 @@ app.post('/webhook/frontend', (req, res) => {
 // Führe nur dann git pull aus, wenn die Signatur korrekt ist
 if (req.body.ref === 'refs/heads/main') { // Prüfe, ob der Push auf den 'main'-Branch erfolgt
   exec('cd /home/secret-sips/secret-sips && git pull && npm i && npm run build && pm2 restart secret-sips-frontend', (error, stdout, stderr) => {
+    console.log("Tried to execute exec")
     if (error) {
       console.error(`Fehler bei git pull: ${error}`);
       return res.sendStatus(500); // Fehler beim git pull
